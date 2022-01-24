@@ -9,7 +9,6 @@ import geekbrains.ru.translator.R
 import geekbrains.ru.translator.databinding.ActivityMainBinding
 import ru.gb.mytranslator.model.data.AppState
 import ru.gb.mytranslator.model.data.DataModel
-import ru.gb.mytranslator.presenter.MainPresenterImpl
 import ru.gb.mytranslator.presenter.Presenter
 import ru.gb.mytranslator.view.base.BaseActivity
 import ru.gb.mytranslator.view.main.adapter.MainAdapter
@@ -27,7 +26,7 @@ class MainActivity : BaseActivity<AppState>() {
         }
 
     override fun createPresenter(): Presenter {
-        return MainPresenterImpl()
+        return Presenter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
