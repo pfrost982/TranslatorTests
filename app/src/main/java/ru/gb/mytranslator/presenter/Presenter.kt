@@ -29,7 +29,9 @@ class Presenter(
 
     fun getData(word: String, isOnline: Boolean) {
         compositeDisposable.add(
-            repository.getData(word, isOnline).map { AppState.Success(it) }
+            repository.getData(word, isOnline).map {
+                AppState.Success(it)
+            }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { currentView?.renderData(AppState.Loading(null)) }

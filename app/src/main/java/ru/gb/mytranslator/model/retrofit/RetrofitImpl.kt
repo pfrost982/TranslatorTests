@@ -12,27 +12,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitImpl  {
 
     fun getData(word: String): Observable<List<DataModel>> {
-        return getService(BaseInterceptor.interceptor).search(word)
+        return getService().search(word)
     }
 
-    private fun getService(interceptor: Interceptor): ApiService {
-        return createRetrofit(interceptor).create(ApiService::class.java)
+    private fun getService(): ApiService {
+        return createRetrofit().create(ApiService::class.java)
     }
 
-    private fun createRetrofit(interceptor: Interceptor): Retrofit {
+    private fun createRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(createOkHttpClient(interceptor))
             .build()
-    }
-
-    private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(interceptor)
-        httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-        return httpClient.build()
     }
 
     companion object {
