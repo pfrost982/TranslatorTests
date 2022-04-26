@@ -1,21 +1,23 @@
-package ru.gb.mytranslator.view.main
+package ru.gb.mytranslator.view
 
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import geekbrains.ru.translator.R
 import geekbrains.ru.translator.databinding.ActivityMainBinding
 import ru.gb.mytranslator.model.data.AppState
 import ru.gb.mytranslator.model.data.DataModel
 import ru.gb.mytranslator.presenter.Presenter
-import ru.gb.mytranslator.view.base.BaseActivity
-import ru.gb.mytranslator.view.main.adapter.MainAdapter
+import ru.gb.mytranslator.presenter.View
+import ru.gb.mytranslator.view.adapter.MainAdapter
 
-class MainActivity : BaseActivity<AppState>() {
+class MainActivity : AppCompatActivity(), View {
 
     private lateinit var binding: ActivityMainBinding
+    lateinit var presenter: Presenter
 
     private var adapter: MainAdapter? = null
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
@@ -25,25 +27,35 @@ class MainActivity : BaseActivity<AppState>() {
             }
         }
 
-    override fun createPresenter(): Presenter {
-        return Presenter()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        presenter = Presenter()
+
         binding.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object :
                 SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
+                    presenter.getData(searchWord)
                 }
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        presenter.attachView(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.detachView(this)
+    }
+
 
     override fun renderData(appState: AppState) {
         when (appState) {
@@ -84,7 +96,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
-            presenter.getData("hi", true)
+            presenter.getData("hi")
         }
     }
 
@@ -108,6 +120,6 @@ class MainActivity : BaseActivity<AppState>() {
 
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
-            "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
+            "BOTTOM_SHEET_FRAGMENT_DIALOG_TAG"
     }
 }

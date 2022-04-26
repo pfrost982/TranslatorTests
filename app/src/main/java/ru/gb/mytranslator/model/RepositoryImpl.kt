@@ -9,7 +9,7 @@ class RepositoryImpl(
     private val remoteProvider: RetrofitImpl = RetrofitImpl()
 ) : Repository {
 
-    override fun getData(word: String, isOnline: Boolean): Observable<List<DataModel>> {
+    override fun getData(word: String): Observable<List<DataModel>> {
         return remoteProvider.getData(word)
     }
 }
