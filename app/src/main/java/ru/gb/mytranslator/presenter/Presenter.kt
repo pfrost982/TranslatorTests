@@ -2,17 +2,16 @@ package ru.gb.mytranslator.presenter
 
 import ru.gb.mytranslator.model.data.AppState
 import ru.gb.mytranslator.model.RepositoryImpl
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.gb.mytranslator.model.data.DataModel
 
 class Presenter(
     private val repository: Repository = RepositoryImpl(),
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable(),
+    private var currentView: View? = null
 ) {
 
-    private var currentView: View? = null
 
     fun attachView(view: View) {
         if (view != currentView) {
@@ -21,39 +20,28 @@ class Presenter(
     }
 
     fun detachView(view: View) {
-        compositeDisposable.clear()
         if (view == currentView) {
             currentView = null
         }
     }
 
     fun getData(word: String) {
-        compositeDisposable.add(
-            repository.getData(word).map {
-                AppState.Success(it)
-            }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    currentView?.renderData(AppState.Loading(null))
-                }
-                .subscribeWith(getObserver())
-        )
-    }
+        val call = repository.getData(word)
+        call.enqueue(object : Callback<List<DataModel>> {
 
-    private fun getObserver(): DisposableObserver<AppState> {
-        return object : DisposableObserver<AppState>() {
-
-            override fun onNext(appState: AppState) {
-                currentView?.renderData(appState)
+            override fun onResponse(
+                call: Call<List<DataModel>>,
+                response: Response<List<DataModel>>
+            ) {
+                currentView?.renderData(AppState.Success(response.body()))
             }
 
-            override fun onError(e: Throwable) {
-                currentView?.renderData(AppState.Error(e))
+            override fun onFailure(
+                call: Call<List<DataModel>>,
+                t: Throwable
+            ) {
+                currentView?.renderData(AppState.Error(t))
             }
-
-            override fun onComplete() {
-            }
-        }
+        })
     }
 }

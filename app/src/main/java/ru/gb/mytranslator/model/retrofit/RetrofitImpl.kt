@@ -1,17 +1,13 @@
 package ru.gb.mytranslator.model.retrofit
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import ru.gb.mytranslator.model.data.DataModel
-import io.reactivex.Observable
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.gb.mytranslator.model.data.DataModel
 
 class RetrofitImpl  {
 
-    fun getData(word: String): Observable<List<DataModel>> {
+    fun getData(word: String): Call<List<DataModel>> {
         return getService().search(word)
     }
 
@@ -23,7 +19,6 @@ class RetrofitImpl  {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 
