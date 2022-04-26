@@ -1,8 +1,13 @@
 package ru.gb.mytranslator.model.data
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class Meanings(
-    @field:SerializedName("translation") val translation: Translation?,
-    @field:SerializedName("imageUrl") val imageUrl: String?
+    @SerializedName("translation")
+    @Expose
+    val translation: Translation?,
+    @SerializedName("imageUrl")
+    @Expose
+    val imageUrl: String?
 )

@@ -18,16 +18,16 @@ class RepositoryImpl(
 
             override fun onResponse(
                 call: Call<List<DataModel>>,
-                response: Response<List<DataModel>>
+                response: Response<List<DataModel>?>
             ) {
-                callback.handleGitHubResponse(response)
+                callback.handleResponse(response)
             }
 
             override fun onFailure(
                 call: Call<List<DataModel>>,
                 t: Throwable
             ) {
-                callback.handleGitHubError(t)
+                callback.handleError(t)
             }
         })
     }

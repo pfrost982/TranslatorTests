@@ -1,8 +1,13 @@
 package ru.gb.mytranslator.model.data
 
 import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.Expose
 
 class DataModel(
-    @field:SerializedName("text") val text: String?,
-    @field:SerializedName("meanings") val meanings: List<Meanings>?
+    @SerializedName("text")
+    @Expose
+    val text: String?,
+    @SerializedName("meanings")
+    @Expose
+    val meanings: List<Meanings>?
 )

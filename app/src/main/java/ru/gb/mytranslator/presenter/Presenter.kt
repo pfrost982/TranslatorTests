@@ -27,13 +27,13 @@ class Presenter(
         repository.getData(word, this)
     }
 
-    override fun handleGitHubResponse(response: Response<List<DataModel>>?) {
+    override fun handleResponse(response: Response<List<DataModel>?>?) {
         if (response != null) {
             currentView?.renderData(AppState.Success(response.body()))
-        }
+        } else currentView?.renderData(AppState.Error(Throwable("Empty response")))
     }
 
-    override fun handleGitHubError(t: Throwable) {
+    override fun handleError(t: Throwable) {
         currentView?.renderData(AppState.Error(t))
     }
 }

@@ -8,6 +8,6 @@ interface Repository {
 }
 
 interface RepositoryCallback {
-    fun handleGitHubResponse(response: Response<List<DataModel>>?)
-    fun handleGitHubError(t: Throwable)
+    fun handleResponse(response: Response<List<DataModel>?>?)
+    fun handleError(t: Throwable)
 }
