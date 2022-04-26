@@ -1,8 +1,13 @@
 package ru.gb.mytranslator.presenter
 
+import retrofit2.Response
 import ru.gb.mytranslator.model.data.DataModel
-import io.reactivex.Observable
 
 interface Repository {
-    fun getData(word: String): Observable<List<DataModel>>
+    fun getData(word: String, callback: RepositoryCallback)
+}
+
+interface RepositoryCallback {
+    fun handleResponse(response: Response<List<DataModel>?>?)
+    fun handleError(t: Throwable)
 }
