@@ -7,7 +7,7 @@ import ru.gb.mytranslator.model.data.DataModel
 
 class RetrofitImpl  {
 
-    fun getData(word: String): Call<List<DataModel>> {
+    fun getData(word: String): Call<List<DataModel>>? {
         return getService().search(word)
     }
 

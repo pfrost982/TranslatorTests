@@ -8,5 +8,5 @@ import ru.gb.mytranslator.model.data.DataModel
 interface ApiService {
 
     @GET("words/search")
-    fun search(@Query("search") wordToSearch: String): Call<List<DataModel>>
+    fun search(@Query("search") wordToSearch: String): Call<List<DataModel>>?
 }
